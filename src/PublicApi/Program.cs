@@ -81,6 +81,7 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddHealthChecks();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Configuration.AddEnvironmentVariables();
@@ -172,6 +173,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
 });
 
+app.MapHealthChecks("/healthz");
 app.MapControllers();
 app.MapEndpoints();
 
