@@ -7,19 +7,18 @@ services:
       context: .
       dockerfile: src/Web/Dockerfile
     depends_on:
-      - "sqlserver"
+      - "postgres"
   eshoppublicapi:
     image: ${DOCKER_REGISTRY-}eshoppublicapi
     build:
       context: .
       dockerfile: src/PublicApi/Dockerfile
     depends_on:
-      - "sqlserver"
-  sqlserver:
-    image: mcr.microsoft.com/azure-sql-edge
-    ports:
-      - "1433:1433"
+      - "postgres"
+  postgres:
+    image: postgres
     environment:
-      - SA_PASSWORD=@someThingComplicated1234
-      - ACCEPT_EULA=Y
+      - POSTGRES_PASSWORD=@someThingComplicated1234
+    ports:
+      - 5432:5432
 

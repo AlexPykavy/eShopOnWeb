@@ -16,7 +16,7 @@ public class CatalogContextSeed
         var retryForAvailability = retry;
         try
         {
-            if (catalogContext.Database.IsSqlServer())
+            // if (catalogContext.Database.IsSqlServer())
             {
                 catalogContext.Database.Migrate();
             }
