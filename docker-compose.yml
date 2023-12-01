@@ -6,6 +6,9 @@ services:
     build:
       context: .
       dockerfile: src/Web/Dockerfile
+    environment:
+      DEFAULT_PASSWORD: Pass@word1
+      JWT_SECRET_KEY: SecretKeyOfDoomThatMustBeAMinimumNumberOfBytes
     depends_on:
       - "postgres"
   eshoppublicapi:
@@ -13,6 +16,9 @@ services:
     build:
       context: .
       dockerfile: src/PublicApi/Dockerfile
+    environment:
+      DEFAULT_PASSWORD: Pass@word1
+      JWT_SECRET_KEY: SecretKeyOfDoomThatMustBeAMinimumNumberOfBytes
     depends_on:
       - "postgres"
   postgres:
