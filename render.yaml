@@ -1,0 +1,73 @@
+services:
+  - type: web
+    name: publicapi
+    runtime: docker
+    region: frankfurt
+    plan: free
+    dockerfilePath: src/PublicApi/Dockerfile
+    numInstances: 1
+    healthCheckPath: /healthz
+    envVars:
+      - fromGroup: eShopOnWebAuthorizationConstants
+      - key: ConnectionStrings__CatalogConnection
+        fromDatabase:
+          name: catalog
+          property: connectionString
+      - key: ConnectionStrings__IdentityConnection
+        fromDatabase:
+          name: identity
+          property: connectionString
+      - key: baseUrls__apiBase
+        fromService:
+          type: web
+          name: publicapi
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: baseUrls__webBase
+        fromService:
+          type: web
+          name: webmvc
+          envVarKey: RENDER_EXTERNAL_URL
+
+  - type: web
+    name: webmvc
+    runtime: docker
+    region: frankfurt
+    plan: free
+    dockerfilePath: src/Web/Dockerfile
+    numInstances: 1
+    healthCheckPath: /
+    envVars:
+      - fromGroup: eShopOnWebAuthorizationConstants
+      - key: ConnectionStrings__CatalogConnection
+        fromDatabase:
+          name: catalog
+          property: connectionString
+      - key: ConnectionStrings__IdentityConnection
+        fromDatabase:
+          name: identity
+          property: connectionString
+      - key: baseUrls__apiBase
+        fromService:
+          type: web
+          name: publicapi
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: baseUrls__webBase
+        fromService:
+          type: web
+          name: webmvc
+          envVarKey: RENDER_EXTERNAL_URL
+
+databases:
+  - name: catalog
+    region: frankfurt
+    plan: free
+    databaseName: catalog
+    user: eshop
+    ipAllowList: []
+
+  - name: identity
+    region: frankfurt
+    plan: free
+    databaseName: identity
+    user: eshop
+    ipAllowList: []
